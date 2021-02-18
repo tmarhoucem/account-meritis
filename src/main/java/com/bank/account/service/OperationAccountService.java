@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bank.account.dao.RetrieverBalance;
 import com.bank.account.dao.RetrieverOperations;
 import com.bank.account.dao.SaverBalance;
@@ -11,6 +13,7 @@ import com.bank.account.model.Operation;
 
 import utils.Result;
 
+@Transactional
 public class OperationAccountService implements IOperationAccountService{
 
 	RetrieverBalance retrieverBalance;
@@ -25,7 +28,7 @@ public class OperationAccountService implements IOperationAccountService{
 		this.retrieverOperations = retrieverOperations;
 	}
 
-	public Result withdrawal( final Double withdrawnAmount, int idAccount) {
+	public synchronized Result withdrawal( final Double withdrawnAmount, int idAccount) {
 		Double balance = retrieverBalance.retrieve(idAccount);
 		if (withdrawnAmount < 0) {
 			return new Result(400, "Cannot withdrawal a negative value." );
@@ -39,7 +42,7 @@ public class OperationAccountService implements IOperationAccountService{
 		return  new Result(201, "success withdrawal! balance = " + balance);
 	}
 
-	public Result add(final Double addedAmount, int idAccount) {
+	public synchronized Result add(final Double addedAmount, int idAccount) {
 		Double balance = retrieverBalance.retrieve(idAccount);
 
 		if (addedAmount < 0) {

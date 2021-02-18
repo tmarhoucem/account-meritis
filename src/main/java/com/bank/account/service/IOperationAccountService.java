@@ -19,6 +19,7 @@ public interface IOperationAccountService {
 	 * add amount
 	 * 
 	 * @param addedAmount
+	 * @param idAccount
 	 * @return Result
 	 */
 	Result add(final Double addedAmount, int idAccount);
