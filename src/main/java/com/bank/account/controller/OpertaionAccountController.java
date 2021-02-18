@@ -7,16 +7,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bank.account.service.OperationAccountService;
+import com.bank.account.service.IOperationAccountService;
 
 import utils.Result;
 
 @Controller
 public class OpertaionAccountController {
 
-	OperationAccountService operationAccountService;
+	IOperationAccountService operationAccountService;
 	
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+	
+	
+    public OpertaionAccountController(IOperationAccountService operationAccountService) {
+		super();
+		this.operationAccountService = operationAccountService;
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
     public Result addAmount(@RequestParam(value="addedAmount") Double addedAmount, @RequestParam(value="idAccount")  int idAccount) {       
         return operationAccountService.add(addedAmount, idAccount);
     }
