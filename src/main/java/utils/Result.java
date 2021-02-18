@@ -18,8 +18,7 @@ public class Result {
 	}
 
 	public Result(int status, String message, List<Operation> operations) {
-		this.status = status;
-		this.message = message;
+		this(status,  message);
 		this.operations = operations;
 	}
 	public int getStatus() {

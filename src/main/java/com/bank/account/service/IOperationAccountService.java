@@ -22,7 +22,7 @@ public interface IOperationAccountService {
 	 * @param idAccount
 	 * @return Result
 	 */
-	Result add(final Double addedAmount, int idAccount);
+	Result deposit(final Double addedAmount, int idAccount);
 	
 	/**
 	 * get operations by date

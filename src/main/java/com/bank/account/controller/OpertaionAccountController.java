@@ -19,13 +19,12 @@ public class OpertaionAccountController {
 	
 	
     public OpertaionAccountController(IOperationAccountService operationAccountService) {
-		super();
 		this.operationAccountService = operationAccountService;
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/deposit", method = RequestMethod.POST)
     public Result addAmount(@RequestParam(value="addedAmount") Double addedAmount, @RequestParam(value="idAccount")  int idAccount) {       
-        return operationAccountService.add(addedAmount, idAccount);
+        return operationAccountService.deposit(addedAmount, idAccount);
     }
     
     @RequestMapping(value = "/withdrawal", method = RequestMethod.POST)

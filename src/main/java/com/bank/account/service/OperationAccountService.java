@@ -42,7 +42,7 @@ public class OperationAccountService implements IOperationAccountService{
 		return  new Result(201, "success withdrawal! balance = " + balance);
 	}
 
-	public synchronized Result add(final Double addedAmount, int idAccount) {
+	public synchronized Result deposit(final Double addedAmount, int idAccount) {
 		Double balance = retrieverBalance.retrieve(idAccount);
 
 		if (addedAmount < 0) {

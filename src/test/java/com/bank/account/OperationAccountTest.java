@@ -1,12 +1,13 @@
 package com.bank.account;
 
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.bank.account.dao.RetrieverBalance;
 import com.bank.account.dao.RetrieverOperations;
@@ -29,7 +30,7 @@ public class OperationAccountTest {
 		RetrieverBalance retrieverBalance = x -> 0.0;
 		SaverBalance saverBalance = x -> true;
 		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance , null) ;
-		Result resulat = operationAccountService.add(1.0, 001);
+		Result resulat = operationAccountService.deposit(1.0, 001);
 		assertTrue("success add! balance = 1.0".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 201);
 	}
@@ -37,9 +38,8 @@ public class OperationAccountTest {
 	@Test
 	public void should_return_failed_add_negative_amount() {
 		RetrieverBalance retrieverBalance = x -> 0.0;
-		SaverBalance saverBalance = x -> true;
-		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance , null);
-		Result resulat = operationAccountService.add(-1.0, 001);
+		operationAccountService = new OperationAccountService(retrieverBalance, null , null);
+		Result resulat = operationAccountService.deposit(-1.0, 001);
 		assertTrue("Cannot add a negative value.".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 400);
 	}
@@ -49,7 +49,7 @@ public class OperationAccountTest {
 		RetrieverBalance retrieverBalance = x -> -2.0;
 		SaverBalance saverBalance = x -> true;
 		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
-		Result resulat = operationAccountService.add(1.0, 001);
+		Result resulat = operationAccountService.deposit(1.0, 001);
 		assertTrue("success add! balance = -1.0".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 201);
 	}
@@ -57,9 +57,8 @@ public class OperationAccountTest {
 	@Test
 	public void should_return_success_add_negative_amount_to_negatice_balance() {
 		RetrieverBalance retrieverBalance = x -> -2.0;
-		SaverBalance saverBalance = x -> true;
-		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
-		Result resulat = operationAccountService.add(-1.0, 001);
+		operationAccountService = new OperationAccountService(retrieverBalance, null, null);
+		Result resulat = operationAccountService.deposit(-1.0, 001);
 		assertTrue("Cannot add a negative value.".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 400);
 	}
@@ -69,7 +68,7 @@ public class OperationAccountTest {
 		RetrieverBalance retrieverBalance = x -> 2.0;
 		SaverBalance saverBalance = x -> true;
 		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
-		Result resulat = operationAccountService.add(1.0, 001);
+		Result resulat = operationAccountService.deposit(1.0, 001);
 		assertTrue("success add! balance = 3.0".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 201);
 	}
@@ -87,8 +86,7 @@ public class OperationAccountTest {
 	@Test
 	public void should_return_success_withdrawal_positive_amount_greater_than_balance() {
 		RetrieverBalance retrieverBalance = x -> 2.0;
-		SaverBalance saverBalance = x -> true;
-		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
+		operationAccountService = new OperationAccountService(retrieverBalance, null, null);
 		Result resulat = operationAccountService.withdrawal(3.0, 001);
 		assertTrue("insufficient balance .".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 400);
@@ -97,8 +95,7 @@ public class OperationAccountTest {
 	@Test
 	public void should_return_success_withdrawal_positive_amount_to_negative_balance() {
 		RetrieverBalance retrieverBalance = x -> -2.0;
-		SaverBalance saverBalance = x -> true;
-		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
+		operationAccountService = new OperationAccountService(retrieverBalance, null, null);
 		Result resulat = operationAccountService.withdrawal(3.0, 001);
 		assertTrue("insufficient balance .".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 400);
@@ -107,8 +104,7 @@ public class OperationAccountTest {
 	@Test
 	public void should_return_success_withdrawal_negative_amount_to_negative_balance() {
 		RetrieverBalance retrieverBalance = x -> 2.0;
-		SaverBalance saverBalance = x -> true;
-		operationAccountService = new OperationAccountService(retrieverBalance, saverBalance, null);
+		operationAccountService = new OperationAccountService(retrieverBalance, null, null);
 		Result resulat = operationAccountService.withdrawal(-3.0, 001);
 		assertTrue("Cannot withdrawal a negative value.".equals(resulat.getMessage()));
 		assertTrue(resulat.getStatus() == 400);
@@ -170,10 +166,9 @@ public class OperationAccountTest {
 	
 	@Test
 	public void should_return_success_retrieve_opeations_begin_after_end_date() {
-		RetrieverOperations retrieverOperations = () -> createOperations();
 		LocalDate beginDate = LocalDate.of(2020,11,01);
 		LocalDate endDate = LocalDate.of(2020,9,01);
-		operationAccountService = new OperationAccountService(null, null, retrieverOperations);
+		operationAccountService = new OperationAccountService(null, null, null);
 		Result resulat = operationAccountService.retrieve(beginDate, endDate);
 		assertTrue("Cannot get operations: begin date after end date.".equals(resulat.getMessage()));
 		assertTrue(null == resulat.getOperations());
